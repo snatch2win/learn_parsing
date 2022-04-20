@@ -16,23 +16,23 @@ def get_html(url, params=""):
 
 def get_content(html):
     soup = BeautifulSoup(html, "html.parser")
-    items = soup.find_all("div", class_="result-block col-sm-8")
+    items_white = soup.find_all("div", class_="row vw-item list-item a-elem")
+    items_yellow = soup.find_all("div", class_="row vw-item list-item yellow a-elem")
+    items_blue = soup.find_all("div", class_="row vw-item list-item blue a-elem")
+    items = items_blue + items_yellow + items_white
     cars = []
 
 
     for item in items:
-        print(item.find("span", class_="price").get_text(strip=True).replace("&nbsp;", ""))
         cars.append(
             {
-                # "title": item.find("div", class_="a-info-top").get_text(strip=True).split("_"),
                 "title": item.find("span", class_="a-el-info-title").get_text(strip=True),#.split("_"),
                 "link_car": HOST + item.find("a", class_="list-link").get("href"),
-                "description": item.find("div", class_="a-search-description").get_text(strip=True),
                 "price": item.find("span", class_="price").get_text(strip=True).replace("&nbsp;", " ").replace("\xa0"," "),
                 "city": item.find("div", class_="list-region").get_text(strip=True),
-                "date": item.find("div", class_="date").get_text(strip=True),
-                "view": item.find("span", class_="nb-views-int").get_text(strip=True),
-                # "val": item.find("span", class_="curr-sign").get_text(strip=True)#.replace("&nbsp;", ""),
+                "date": item.find("span", class_="date").get_text(strip=True),
+                # "view": item.find("span", class_="nb-views-int").get_text(strip=True),
+                # "description": item.find("div", class_="a-search-description").get_text(strip=True),
             }
         )
 
@@ -41,11 +41,11 @@ def get_content(html):
 def save_csv(items, path):
     with open(path, "w", newline="") as file:
         writer = csv.writer(file, delimiter="*")
-        writer.writerow(["model", "link", "описание", "price", "город", "дата", "view"])
+        # writer.writerow([["model"], ["link"], ["описание"], ["price"], ["город"], ["дата"]])
         for item in items:
-            writer.writerow([item["title"], item["link_car"], item["description"], item["price"], item["city"], item["date"], item["view"]])
+            writer.writerow([item["title"], item["price"], item["city"], item["date"], item["link_car"]])
 
-
+# item["description"], item["view"]
 
 def parser():
     PAGENATION = input("введите стр: ")
@@ -67,15 +67,4 @@ parser()
 
 
 
-
-
-
-
-
-
-
-
-
-# html = get_html(URL)
-# print(get_content(html.text))
 
