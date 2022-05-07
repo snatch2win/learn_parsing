@@ -40,7 +40,7 @@ def get_content(html):
 
 def save_csv(items, path):
     with open(path, "w", newline="") as file:
-        writer = csv.writer(file, delimiter="*")
+        writer = csv.writer(file, delimiter=" ")
         # writer.writerow([["model"], ["link"], ["описание"], ["price"], ["город"], ["дата"]])
         for item in items:
             writer.writerow([item["title"], item["price"], item["city"], item["date"], item["link_car"]])
